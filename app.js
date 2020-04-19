@@ -8,6 +8,12 @@ function between(min, max) {
 }
 
 
+async function getRank(page){
+  const leaderboard = await page.$("h5.js-leaderboard-count");
+  const text = await page.evaluate(leaderboard => leaderboard.textContent, leaderboard);
+  return text.replace('#', '');
+}
+
 (async () => {
     const browser = await puppeteer.launch();
     const page = await browser.newPage();
@@ -25,7 +31,7 @@ function between(min, max) {
 
     var Found = false;
 
-    while (true) {
+    while (await getRank(page) > 500) {
         try {
             await page.waitForSelector('div.VotingButtons')
             console.log('found');
