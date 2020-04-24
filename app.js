@@ -15,10 +15,15 @@ async function getRank(page){
 }
 
 (async () => {
-    const browser = await puppeteer.launch();
+    const browser = await puppeteer.launch({
+      headless: false,
+      args: ['--start-fullscreen']
+    });
+    
     const page = await browser.newPage();
     await page.goto('https://app.directly.com/dashboard/index');
 
+  
     // login
     await page.type('#j_username', config.login.email)
     await page.type('#j_password', config.login.password)
@@ -31,7 +36,7 @@ async function getRank(page){
 
     var Found = false;
 
-    while (await getRank(page) > 500) {
+    while (await getRank(page) > 993) {
         try {
             await page.waitForSelector('div.VotingButtons')
             console.log('found');
@@ -55,12 +60,12 @@ async function getRank(page){
         } catch {
             Found = false;
             var element = await page.$('a.task-skip-submit.js-next-question');
-            await element.click();
+            if(element != undefined)
+              await element.click();
             console.log('not found');
+
         }
     }
 
     await browser.close();
 })();
-
-
