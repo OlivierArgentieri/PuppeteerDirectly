@@ -1,5 +1,8 @@
-const puppeteer = require('puppeteer');
+const puppeteer = require('puppeteer-extra');
 const config = require('./config.json');
+const StealthPlugin = require('puppeteer-extra-plugin-stealth')
+puppeteer.use(StealthPlugin())
+
 
 function between(min, max) {  
     return Math.floor(
@@ -16,14 +19,15 @@ async function getRank(page){
 
 (async () => {
     const browser = await puppeteer.launch({
-      headless: false,
-      args: ['--start-fullscreen']
+     /* headless: false,
+      args: ['--start-fullscreen']*/
     });
     
     const page = await browser.newPage();
     await page.goto('https://app.directly.com/dashboard/index');
+    await page.screenshot({ path: 'examplere.png' });
 
-  
+    
     // login
     await page.type('#j_username', config.login.email)
     await page.type('#j_password', config.login.password)
@@ -32,7 +36,7 @@ async function getRank(page){
 
     // ==  click yes/no
 
-    // contient yes/endorse button ? 
+    // contains yes/endorse button ? 
 
     var Found = false;
 
@@ -42,9 +46,9 @@ async function getRank(page){
             console.log('found');
 
             await page.waitFor(between(4000, 10000));
-          //  await delay(1000);
+
             await page.click('button.VotingButton.VotingButton--upvote.btn-white');
-          //  await delay(2000);
+
             console.log('vote clicked');
 
             await page.waitFor(2000);
@@ -62,8 +66,12 @@ async function getRank(page){
             var element = await page.$('a.task-skip-submit.js-next-question');
             if(element != undefined)
               await element.click();
-            console.log('not found');
 
+            element = await page.$('a.skip-task.js-next-question');
+            if(element != undefined)
+              await element.click();
+
+              console.log('Looping issue !!');
         }
     }
 
