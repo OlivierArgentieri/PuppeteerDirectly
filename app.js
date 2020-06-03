@@ -19,8 +19,8 @@ async function getRank(page){
 
 (async () => {
     const browser = await puppeteer.launch({
-     /* headless: false,
-      args: ['--start-fullscreen']*/
+    /* headless: false,
+      args: ['--start-fullscreen'] */
     });
     
     const page = await browser.newPage();
@@ -37,15 +37,19 @@ async function getRank(page){
     // ==  click yes/no
 
     // contains yes/endorse button ? 
-
+    await page.waitFor(4000);
+    // accept rgdp cookie popup
+    var rgpd = await page.$('#adroll_allow');
+    await rgpd.click();
     var Found = false;
 
-    while (await getRank(page) > 993) {
+    while (await getRank(page) > 950
+) {
         try {
             await page.waitForSelector('div.VotingButtons')
             console.log('found');
 
-            await page.waitFor(between(4000, 10000));
+            await page.waitFor(between(4000, 961));
 
             await page.click('button.VotingButton.VotingButton--upvote.btn-white');
 
