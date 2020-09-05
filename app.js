@@ -43,7 +43,7 @@ async function getRank(page){
     await rgpd.click();
     var Found = false;
 
-    while (await getRank(page) > 950
+    while (await getRank(page) > 702
 ) {
         try {
             await page.waitForSelector('div.VotingButtons')
@@ -67,15 +67,21 @@ async function getRank(page){
 
         } catch {
             Found = false;
-            var element = await page.$('a.task-skip-submit.js-next-question');
-            if(element != undefined)
+            
+
+            try{
+              var element = await page.$('a.task-skip-submit.js-next-question');
+              if(element != undefined)
               await element.click();
 
-            element = await page.$('a.skip-task.js-next-question');
-            if(element != undefined)
-              await element.click();
+              element = await page.$('a.skip-task.js-next-question');
+              if(element != undefined)
+                await element.click();
+            }
 
+            catch {
               console.log('Looping issue !!');
+            }
         }
     }
 
