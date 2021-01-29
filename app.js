@@ -33,7 +33,7 @@ async function getRank(page){
     await page.type('#j_password', config.login.password)
     await page.click('div.control-group button');
     await page.waitForNavigation();
-
+    userDataDir: ('./user_data'),
     // ==  click yes/no
 
     // contains yes/endorse button ? 
